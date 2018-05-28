@@ -14,6 +14,19 @@ public class Reservation {
     private Date start, end;
     private Room room;
     private Customer customer;
+    private State state;
+
+    public Reservation(int id, Date start, Date end,
+                       Room room, Customer customer, State state) {
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.room = room;
+        this.customer = customer;
+        this.state = state;
+    }
+
+    public Reservation(){}
 
     public void setId(int id) {
         this.id = id;
@@ -35,6 +48,10 @@ public class Reservation {
         this.customer = customer;
     }
 
+    public void setState(State state) {
+        this.state = state;
+    }
+
     public int getId() {
         return id;
     }
@@ -53,5 +70,9 @@ public class Reservation {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public State getState() {
+        return state;
     }
 }

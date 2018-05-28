@@ -3,6 +3,11 @@ package app;
 public class Customer {
     private String id, name, surname;
 
+    public Customer(String id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
     public void setId(String id) {
         this.id = id;
     }
