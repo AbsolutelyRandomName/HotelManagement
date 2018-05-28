@@ -1,5 +1,7 @@
 package app;
 
+import org.junit.Before;
+
 public class Customer {
     private String id, name, surname;
 
@@ -27,4 +29,15 @@ public class Customer {
     public String getSurname(){
         return surname;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null) return false;
+        if(obj instanceof Customer) {
+            Customer compared = (Customer)obj;
+            return (id.equals(compared.getId()) && name.equals(compared.getName())
+            && surname.equals(compared.getSurname()));
+        } else return false;
+    }
+
 }

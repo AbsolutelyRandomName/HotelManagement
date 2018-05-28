@@ -32,4 +32,13 @@ public class Room {
     public RoomType getType() {
         return type;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(obj instanceof Room){
+            Room compared = (Room)obj;
+            return (number == compared.getNumber() && type.equals(compared.getType()));
+        } else return false;
+    }
 }

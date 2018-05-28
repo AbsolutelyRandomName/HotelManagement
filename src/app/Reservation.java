@@ -1,6 +1,6 @@
 package app;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 enum State{
     Confirmed,
@@ -11,12 +11,12 @@ enum State{
 
 public class Reservation {
     private int id;
-    private Date start, end;
+    private LocalDate start, end;
     private Room room;
     private Customer customer;
     private State state;
 
-    public Reservation(int id, Date start, Date end,
+    public Reservation(int id, LocalDate start, LocalDate end,
                        Room room, Customer customer, State state) {
         this.id = id;
         this.start = start;
@@ -32,11 +32,11 @@ public class Reservation {
         this.id = id;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 
@@ -56,11 +56,11 @@ public class Reservation {
         return id;
     }
 
-    public Date getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
@@ -74,5 +74,16 @@ public class Reservation {
 
     public State getState() {
         return state;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(obj instanceof Reservation) {
+            Reservation compared = (Reservation)obj;
+            return (id == compared.getId() && start.equals(compared.getStart())
+                    && end.equals(compared.getEnd()) && room.equals(compared.getRoom())
+                    && customer.equals(compared.getCustomer()) && state.equals(compared.getState()));
+        } else return false;
     }
 }
