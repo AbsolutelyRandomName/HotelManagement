@@ -3,8 +3,6 @@ import org.junit.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class UnitTest {
     private DbManager manager;
@@ -21,7 +19,7 @@ public class UnitTest {
     }
 
     @Test
-    public void readTest() {
+    public void dbTest() {
         Customer cust1 = new Customer("ID", "Name 1", "Surname1");
         Customer cust2 = new Customer("ID 2", "Name 2", "Surname 3");
         Assert.assertTrue(manager.addCustomer(cust1));
@@ -105,5 +103,40 @@ public class UnitTest {
         Assert.assertEquals(res1, resList.get(0));
         Assert.assertEquals(res2, resList.get(1));
 
+        LocalDate start3 = LocalDate.of(2018, 2, 26);
+        LocalDate end3 = LocalDate.of(2018, 3, 4);
+        try {
+            roomResults = manager.findFreeRooms(start3, end3, null);
+        } catch (Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(1, roomResults.size());
+        Assert.assertEquals(room2, roomResults.get(0));
+        LocalDate start4 = LocalDate.of(2018, 3, 3);
+        LocalDate end4 = LocalDate.of(2018, 3, 6);
+        try {
+            roomResults = manager.findFreeRooms(start4, end4, null);
+        } catch (Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(0, roomResults.size());
+
+        LocalDate start5 = LocalDate.of(2018, 2, 3);
+        LocalDate end5 = LocalDate.of(2018, 3, 17);
+        try {
+            roomResults = manager.findFreeRooms(start5, end5, null);
+        } catch (Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(0, roomResults.size());
+        try {
+            manager.close();
+        } catch(Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
     }
 }

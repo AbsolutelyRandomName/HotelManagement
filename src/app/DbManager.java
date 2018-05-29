@@ -1,8 +1,8 @@
 package app;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DbManager {
     private Connection conn;
@@ -227,4 +227,72 @@ public class DbManager {
         return results;
     }
 
+    public boolean deleteCustomer(Customer customer) {
+        PreparedStatement stmt = null;
+        String sql = "DELETE FROM CUSTOMERS WHERE id = ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, customer.getId());
+            stmt.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deleteRoom(Room room){
+        PreparedStatement stmt = null;
+        String sql = "DELETE FROM ROOMS WHERE number = ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, room.getNumber());
+            stmt.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deleteReservation(Reservation reservation) {
+        PreparedStatement stmt = null;
+        String sql = "DELETE FROM RESERVATIONS WHERE id = ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, reservation.getId());
+            stmt.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public ArrayList<Room> findFreeRooms(LocalDate start, LocalDate end, RoomType type) throws SQLException{
+        ArrayList<Room> results = new ArrayList<>();
+        PreparedStatement stmt;
+        String sql = "SELECT DISTINCT * FROM ROOMS WHERE number NOT IN (" +
+                "SELECT roomNo FROM RESERVATIONS WHERE (" +
+                "start >= ? AND start < ?) OR " +
+                "(end >= ? AND end <=?) OR " +
+                "(start <= ? AND end >= ?)) AND type LIKE ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, Date.valueOf(start));
+            stmt.setDate(2, Date.valueOf(end));
+            stmt.setDate(3, Date.valueOf(start));
+            stmt.setDate(4, Date.valueOf(end));
+            stmt.setDate(5, Date.valueOf(start));
+            stmt.setDate(6, Date.valueOf(end));
+            if(type == null) stmt.setString(7, "%");
+            else stmt.setInt(7, type.ordinal());
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next())
+                results.add(new Room(rs.getInt(1), RoomType.values()[rs.getInt(2)]));
+        } catch (SQLException e){
+            throw e;
+        }
+        return results;
+    }
 }

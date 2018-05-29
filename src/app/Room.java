@@ -4,7 +4,6 @@ enum RoomType{
     Single,
     Double,
     Triple,
-    Any //Only for searching purposes
 }
 
 public class Room {
