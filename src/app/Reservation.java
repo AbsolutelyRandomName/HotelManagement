@@ -76,6 +76,18 @@ public class Reservation {
         return state;
     }
 
+    public String getCustomerName() {
+        return customer.getName();
+    }
+
+    public String getCustomerSurname() {
+        return customer.getSurname();
+    }
+
+    public int getRoomNo() {
+        return room.getNumber();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null) return false;

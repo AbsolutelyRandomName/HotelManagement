@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+<?import javafx.collections.*?>
+
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.MenuItem?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.121" fx:controller="app.MainWindowController">
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="Close"/>
+                </Menu>
+                <Menu text="New">
+                    <MenuItem text="Customer"/>
+                    <MenuItem text="Room"/>
+                </Menu>
+                <Menu text="Find">
+                    <MenuItem text="Customer"/>
+                    <MenuItem text="Room"/>
+                </Menu>
+            </MenuBar>
+            <HBox spacing="20">
+                <TextField fx:id="idField" minWidth="50" promptText="ID" />
+                <TextField fx:id="customerIdField" minWidth="90" promptText="Customer ID" />
+                <TextField fx:id="nameField" minWidth="80" promptText="Name" />
+                <TextField fx:id="surnameField" minWidth="80" promptText="Surname" />
+                <TextField fx:id="roomNoField" minWidth="80" promptText="Room No" />
+                <CheckBox fx:id="startEnabler" onMouseClicked="#onStartEnablerClicked" text="Start"/>
+                <DatePicker fx:id="startPicker" disable="true" minWidth="90" />
+                <CheckBox fx:id="endEnabler" onMouseClicked="#onEndEnablerClicked" text="End"/>
+                <DatePicker fx:id="endPicker" disable="true" minWidth="90" />
+                <ComboBox fx:id="statusSelector" minWidth="50">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Any"/>
+                            <String fx:value="Confirmed"/>
+                            <String fx:value="Cancelled"/>
+                            <String fx:value="No show"/>
+                            <String fx:value="Payed"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Button onMouseClicked="#onSearchClicked" text="Search" />
+            </HBox>
+        </VBox>
+
+    </top>
+    <center>
+        <TableView fx:id="reservationsTable"/>
+    </center>
+    <bottom>
+        <HBox spacing="20">
+            <Button text="New reservation" onMouseClicked="#onNewClicked"/>
+            <Button text="Edit reservation" onMouseClicked="#onEditClicked"/>
+            <Button text="Delete reservation" onMouseClicked="#onDeleteClicked"/>
+        </HBox>
+    </bottom>
+</BorderPane>

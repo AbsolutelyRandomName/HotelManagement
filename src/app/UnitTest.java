@@ -92,7 +92,7 @@ public class UnitTest {
         Assert.assertTrue(manager.addReservation(res2));
         ArrayList<Reservation> resList = null;
         try {
-            resList = manager.getReservations(-1, null, null, null, -1, null);
+            resList = manager.getReservations(-1, null, null, null,null, null, -1, null);
         } catch (Exception e){
             e.printStackTrace();
             Assert.fail();
@@ -132,6 +132,44 @@ public class UnitTest {
             Assert.fail();
         }
         Assert.assertEquals(0, roomResults.size());
+
+        cust1.setName("ChangedName");
+        Assert.assertTrue(manager.editCustomer(cust1));
+        manager.deleteCustomer(cust2);
+        try {
+            results = manager.getCustomers(null, null, null);
+        } catch(Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(1, results.size());
+        Assert.assertEquals(cust1, results.get(0));
+
+        room1.setType(RoomType.Double);
+        Assert.assertTrue(manager.editRoom(room1));
+        Assert.assertTrue(manager.deleteRoom(room2));
+
+        try {
+            roomResults = manager.getRooms(1, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(1, roomResults.size());
+        Assert.assertEquals(room1, roomResults.get(0));
+
+        res1.setState(State.NoShow);
+        Assert.assertTrue(manager.editReservation(res1));
+        Assert.assertTrue(manager.deleteReservation(res2));
+        try {
+            resList = manager.getReservations(-1, null, null, null, null, null, -1, null);
+        } catch (Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(1, resList.size());
+        Assert.assertEquals(res1, resList.get(0));
+
         try {
             manager.close();
         } catch(Exception e){

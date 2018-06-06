@@ -13,11 +13,11 @@ public class DbManager {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
         } catch (ClassNotFoundException e){
-            throw new ClassNotFoundException();
+            throw e;
         }
-        conn = DriverManager.getConnection("jdbc:hsqldb:file:hotel_data");
+        conn = DriverManager.getConnection("jdbc:hsqldb:mem:chuj");
         stmt = conn.createStatement();
-        String sql = "CREATE TABLE RESERVATIONS IF NOT EXISTS (" +
+        String sql = "CREATE TABLE IF NOT EXISTS RESERVATIONS(" +
                 "id INT NOT NULL," +
                 "start DATE NOT NULL," +
                 "end DATE NOT NULL," +
@@ -25,12 +25,12 @@ public class DbManager {
                 "roomNo INT," +
                 "state INT NOT NULL)";
         stmt.execute(sql);
-        sql = "CREATE TABLE CUSTOMERS IF NOT EXISTS (" +
+        sql = "CREATE TABLE IF NOT EXISTS CUSTOMERS(" +
                 "id VARCHAR (100) NOT NULL," +
                 "name VARCHAR(50) NOT NULL," +
                 "surname VARCHAR(50) NOT NULL)";
         stmt.execute(sql);
-        sql = "CREATE TABLE ROOMS IF NOT EXISTS (" +
+        sql = "CREATE TABLE IF NOT EXISTS ROOMS(" +
                 "number INT NOT NULL," +
                 "type INT NOT NULL)";
         stmt.execute(sql);
@@ -181,36 +181,41 @@ public class DbManager {
         return results;
     }
 
-    public ArrayList<Reservation> getReservations(int id, Date start, Date end,
-                                                  String personId, int roomNo, State state) throws SQLException {
+    public ArrayList<Reservation> getReservations(int id, LocalDate start, LocalDate end,
+                                                  String personId, String name, String surname, int roomNo, State state) throws SQLException {
         ArrayList<Reservation> results = new ArrayList<>();
         PreparedStatement stmt = null;
         String sql = "SELECT * FROM ((RESERVATIONS INNER JOIN CUSTOMERS ON customerId = CUSTOMERS.id)" +
                 "INNER JOIN ROOMS ON roomNo = ROOMS.number) " +
                 "WHERE (id LIKE ? AND start LIKE ? AND " +
-                "end LIKE ? AND customerId LIKE ? AND roomNo LIKE ? AND state LIKE ?)";
+                "end LIKE ? AND customerId LIKE ? AND CUSTOMERS.name LIKE ? AND CUSTOMERS.surname LIKE ? AND roomNo LIKE ? AND state LIKE ?)";
         try {
             stmt = conn.prepareStatement(sql);
             if(id >= 0) stmt.setInt(1, id);
             else stmt.setString(1, "%");
 
-            if(start != null) stmt.setDate(2, start);
+            if(start != null) stmt.setDate(2, Date.valueOf(start));
             else stmt.setString(2, "%");
 
-            if(end != null) stmt.setDate(3, end);
+            if(end != null) stmt.setDate(3, Date.valueOf(end));
             else stmt.setString(3, "%");
 
             if(personId == null || personId.equals("")) stmt.setString(4, "%");
             else stmt.setString(4, personId);
 
-            if(roomNo >= 0) stmt.setInt(5, roomNo);
-            else stmt.setString(5, "%");
+            if(name == null || name.equals("")) stmt.setString(5, "%");
+            else stmt.setString(5, name);
 
-            if(state != null) stmt.setInt(6, state.ordinal());
-            else stmt.setString(6, "%");
+            if(surname == null || surname.equals("")) stmt.setString(6, "%");
+            else stmt.setString(6, surname);
+
+            if(roomNo >= 0) stmt.setInt(7, roomNo);
+            else stmt.setString(7, "%");
+
+            if(state != null) stmt.setInt(8, state.ordinal());
+            else stmt.setString(8, "%");
 
             ResultSet rs = stmt.executeQuery();
-            int count = 0;
             while(rs.next()){
                 Customer customer = new Customer(rs.getString(7),
                         rs.getString(8), rs.getString(9));
@@ -220,6 +225,7 @@ public class DbManager {
                         rs.getDate(3).toLocalDate(), room, customer, State.values()[rs.getInt(6)]);
                 results.add(reservation);
             }
+
         } catch (Exception e){ e.printStackTrace(); throw e;}
         finally {
             if(stmt != null) try { stmt.close(); } catch (Exception e){ e.printStackTrace(); }
@@ -294,5 +300,58 @@ public class DbManager {
             throw e;
         }
         return results;
+    }
+    public boolean editCustomer(Customer customer) {
+        int rows;
+        PreparedStatement stmt;
+        String sql = "UPDATE CUSTOMERS SET name = ?, surname = ? WHERE id = ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, customer.getName());
+            stmt.setString(2, customer.getSurname());
+            stmt.setString(3, customer.getId());
+            rows = stmt.executeUpdate();
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return rows > 0;
+    }
+
+    public boolean editRoom(Room room) {
+        int rows;
+        PreparedStatement stmt;
+        String sql = "UPDATE ROOMS SET type = ? WHERE number = ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, room.getType().ordinal());
+            stmt.setInt(2, room.getNumber());
+            rows = stmt.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return rows > 0;
+    }
+
+    public boolean editReservation(Reservation reservation) {
+        int rows;
+        PreparedStatement stmt;
+        String sql = "UPDATE RESERVATIONS SET start = ?, end = ?, customerId = ?, " +
+                "roomNo = ?, state = ? WHERE id = ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, Date.valueOf(reservation.getStart()));
+            stmt.setDate(2, Date.valueOf(reservation.getEnd()));
+            stmt.setString(3, reservation.getCustomer().getId());
+            stmt.setInt(4, reservation.getRoom().getType().ordinal());
+            stmt.setInt(5, reservation.getState().ordinal());
+            stmt.setInt(6, reservation.getId());
+            rows = stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return rows > 0;
     }
 }
