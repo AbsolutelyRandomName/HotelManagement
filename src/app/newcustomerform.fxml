@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="20" fx:controller="app.NewCustomerFormController">
+    <HBox alignment="CENTER_LEFT">
+        <RadioButton fx:id="peselRadio" text="PESEL" selected="true"/>
+        <RadioButton fx:id="otherRadio" text="Other"/>
+    </HBox>
+    <HBox spacing="30" alignment="CENTER_LEFT">
+        <Label text="ID" minWidth="40"/>
+        <TextField fx:id="idField" promptText="ID"/>
+    </HBox>
+    <HBox spacing="30" alignment="CENTER_LEFT">
+        <Label text="Name" minWidth="40"/>
+        <TextField fx:id="nameField" promptText="Name"/>
+    </HBox>
+    <HBox spacing="30" alignment="CENTER_LEFT">
+        <Label text="ID" minWidth="40"/>
+        <TextField fx:id="surnameField" promptText="Surname"/>
+    </HBox>
+    <HBox spacing="30" alignment="CENTER_RIGHT">
+        <Button text="Ok" onAction="#onOkButtonClicked"/>
+        <Button text="Cancel" onAction="#onCancelButtonClicked"/>
+    </HBox>
+</VBox>

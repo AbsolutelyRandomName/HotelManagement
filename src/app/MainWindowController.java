@@ -4,11 +4,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-import java.security.PolicySpi;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,7 +46,8 @@ public class MainWindowController {
     private DbManager manager;
     private ArrayList<Reservation> reservations;
 
-    public void initialize() {
+    @FXML
+    private void initialize() {
 
         try {
             manager = new DbManager("testbase");
@@ -92,13 +98,16 @@ public class MainWindowController {
 
 
     }
-    public void onStartEnablerClicked(MouseEvent e) {
+    @FXML
+    private void onStartEnablerClicked(MouseEvent e) {
         startPicker.setDisable(!startEnabler.isSelected());
     }
-    public void onEndEnablerClicked(MouseEvent e) {
+    @FXML
+    private void onEndEnablerClicked(MouseEvent e) {
         endPicker.setDisable(!endEnabler.isSelected());
     }
-    public void onSearchClicked(MouseEvent e) {
+    @FXML
+    private void onSearchClicked(MouseEvent e) {
 
         LocalDate start =  null, end = null;
         int id = -1, roomNo = -1;
@@ -123,6 +132,7 @@ public class MainWindowController {
             reservationsTable.setItems(FXCollections.observableArrayList(reservations));
         } catch (SQLException ex) {
             ex.printStackTrace();
+
         }
     }
     public void onNewClicked(MouseEvent e) {
@@ -135,6 +145,23 @@ public class MainWindowController {
 
     public void onDeleteClicked(MouseEvent e) {
 
+    }
+    @FXML
+    private void onCloseClicked() {
+        ((Stage)idField.getScene().getWindow()).close();
+    }
+    @FXML
+    private void onNewCustomerClicked() throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("newcustomerform.fxml"));
+        Parent root = loader.load();
+        NewCustomerFormController controller = loader.getController();
+        controller.setDbManager(manager);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initOwner(roomNoField.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
     }
 
 }

@@ -21,10 +21,10 @@
         <VBox>
             <MenuBar>
                 <Menu text="File">
-                    <MenuItem text="Close"/>
+                    <MenuItem text="Close" onAction="#onCloseClicked"/>
                 </Menu>
                 <Menu text="New">
-                    <MenuItem text="Customer"/>
+                    <MenuItem text="Customer" onAction="#onNewCustomerClicked"/>
                     <MenuItem text="Room"/>
                 </Menu>
                 <Menu text="Find">
