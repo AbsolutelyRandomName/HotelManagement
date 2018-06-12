@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="30" fx:controller="app.NewRoomFormController">
+    <HBox spacing="20" alignment="CENTER_LEFT" >
+        <Label text="Room number" minWidth="80"/>
+        <TextField fx:id="roomNoField" promptText="Number"/>
+    </HBox>
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Type" minWidth="80"/>
+        <ComboBox fx:id="typeSelector">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Single"/>
+                    <String fx:value="Double"/>
+                    <String fx:value="Triple"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="Ok" onAction="#onOkButtonClicked"/>
+        <Button text="Cancel" onAction="#onCancelButtonClicked"/>
+    </HBox>
+</VBox>

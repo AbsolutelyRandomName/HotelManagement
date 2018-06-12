@@ -25,10 +25,10 @@
                 </Menu>
                 <Menu text="New">
                     <MenuItem text="Customer" onAction="#onNewCustomerClicked"/>
-                    <MenuItem text="Room"/>
+                    <MenuItem text="Room" onAction="#onNewRoomClicked"/>
                 </Menu>
                 <Menu text="Find">
-                    <MenuItem text="Customer"/>
+                    <MenuItem text="Customer" onAction="#onFindCustomerClicked"/>
                     <MenuItem text="Room"/>
                 </Menu>
             </MenuBar>

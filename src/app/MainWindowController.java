@@ -164,4 +164,34 @@ public class MainWindowController {
         stage.showAndWait();
     }
 
+    @FXML
+    private void onNewRoomClicked() throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("newroomform.fxml"));
+        Parent root = loader.load();
+        NewRoomFormController controller = loader.getController();
+        controller.setManager(manager);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("New room");
+        stage.initOwner(roomNoField.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+    }
+
+    @FXML
+    private void onFindCustomerClicked() throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FindCustomer.fxml"));
+        Parent root = loader.load();
+        FindCustomerController controller = loader.getController();
+        controller.setManager(manager);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Find customer");
+        stage.initOwner(roomNoField.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+    }
+
 }
