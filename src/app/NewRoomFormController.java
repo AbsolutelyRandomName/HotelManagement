@@ -19,13 +19,9 @@ public class NewRoomFormController {
 
     @FXML
     public void initialize() {
-        roomNoField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(!newValue.matches("[\\d]")) {
-                    roomNoField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
+        roomNoField.textProperty().addListener((observable, o, n) -> {
+            if(!n.matches("[\\d]"))
+                roomNoField.setText(n.replaceAll("[^\\d]", ""));
         });
 
         typeSelector.getSelectionModel().select(0);

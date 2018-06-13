@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="app.FindRoomController">
+    <top>
+        <HBox spacing="20">
+            <TextField fx:id="numberField"/>
+            <ComboBox fx:id="typeSelector" >
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Any"/>
+                        <String fx:value="Single"/>
+                        <String fx:value="Double"/>
+                        <String fx:value="Triple"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Button text="Search" onAction="#onSearchClicked"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="roomsTable"/>
+    </center>
+    <bottom>
+        <HBox spacing="20" alignment="CENTER_RIGHT">
+            <Button text="Edit" onAction="#onEditClicked"/>
+            <Button text="Delete" onAction="#onDeleteClicked"/>
+            <Button text="Close" onAction="#onCloseClicked"/>
+        </HBox>
+    </bottom>
+</BorderPane>

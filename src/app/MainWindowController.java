@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -37,7 +36,7 @@ public class MainWindowController {
     @FXML
     private DatePicker endPicker;
     @FXML
-    private TableView reservationsTable;
+    private TableView<Reservation> reservationsTable;
     @FXML
     private ComboBox statusSelector;
     @FXML
@@ -56,20 +55,14 @@ public class MainWindowController {
             alert.show();
         }
 
-        idField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(!newValue.matches("[\\d]"))
-                    idField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+        idField.textProperty().addListener((observable, o, n) -> {
+            if(!n.matches("[\\d]"))
+                idField.setText(n.replaceAll("[^\\d]", ""));
         });
 
-        roomNoField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(!newValue.matches("[\\d]"))
-                    roomNoField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+        roomNoField.textProperty().addListener((observable, o, n) -> {
+            if(!n.matches("[\\d]"))
+                roomNoField.setText(n.replaceAll("[^\\d]", ""));
         });
 
         statusSelector.getSelectionModel().select(0);
@@ -87,9 +80,11 @@ public class MainWindowController {
         startColumn.setCellValueFactory(new PropertyValueFactory<Reservation, LocalDate>("start"));
         TableColumn endColumn = new TableColumn("End");
         endColumn.setCellValueFactory(new PropertyValueFactory<Reservation, LocalDate>("end"));
+        TableColumn stateColumn = new TableColumn("State");
+        stateColumn.setCellValueFactory(new PropertyValueFactory<Reservation, State>("state"));
 
         reservationsTable.getColumns().addAll(idColumn, nameColumn, surnameColumn,
-                roomColumn, startColumn, endColumn);
+                roomColumn, startColumn, endColumn, stateColumn);
         try {
             reservations = manager.getReservations(-1, null, null, null, null, null,-1, null);
             System.out.println(reservations.size());
@@ -99,15 +94,15 @@ public class MainWindowController {
 
     }
     @FXML
-    private void onStartEnablerClicked(MouseEvent e) {
+    private void onStartEnablerClicked() {
         startPicker.setDisable(!startEnabler.isSelected());
     }
     @FXML
-    private void onEndEnablerClicked(MouseEvent e) {
+    private void onEndEnablerClicked() {
         endPicker.setDisable(!endEnabler.isSelected());
     }
     @FXML
-    private void onSearchClicked(MouseEvent e) {
+    private void onSearchClicked() {
 
         LocalDate start =  null, end = null;
         int id = -1, roomNo = -1;
@@ -135,16 +130,29 @@ public class MainWindowController {
 
         }
     }
-    public void onNewClicked(MouseEvent e) {
+    public void onNewClicked() throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("newreservationform.fxml"));
+        Parent root = loader.load();
+        NewReservationController controller = loader.getController();
+        controller.setManager(manager);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.initOwner(roomNoField.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+    }
+
+    public void onEditClicked() {
 
     }
 
-    public void onEditClicked(MouseEvent e) {
-
-    }
-
-    public void onDeleteClicked(MouseEvent e) {
-
+    public void onDeleteClicked() {
+        Reservation reservation = reservationsTable.getSelectionModel().getSelectedItem();
+        if(reservation == null) return;
+        manager.deleteReservation(reservation);
+        onSearchClicked();
     }
     @FXML
     private void onCloseClicked() {
@@ -194,4 +202,18 @@ public class MainWindowController {
         stage.showAndWait();
     }
 
+    @FXML
+    private void onFindRoomClicked() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("findroomdialog.fxml"));
+        Parent root = loader.load();
+        FindRoomController controller = loader.getController();
+        controller.setManager(manager);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Find rooms");
+        stage.initOwner(roomNoField.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+    }
 }

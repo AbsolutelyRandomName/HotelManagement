@@ -5,8 +5,7 @@ import java.time.LocalDate;
 enum State{
     Confirmed,
     Cancelled,
-    NoShow,
-    Payed
+    NoShow
 }
 
 public class Reservation {

@@ -15,7 +15,7 @@ public class DbManager {
         } catch (ClassNotFoundException e){
             throw e;
         }
-        conn = DriverManager.getConnection("jdbc:hsqldb:mem:chuj");
+        conn = DriverManager.getConnection("jdbc:hsqldb:mem:membase");
         stmt = conn.createStatement();
         String sql = "CREATE TABLE IF NOT EXISTS RESERVATIONS(" +
                 "id INT NOT NULL," +
@@ -353,5 +353,20 @@ public class DbManager {
             return false;
         }
         return rows > 0;
+    }
+
+    public int lastReservation() {
+        Statement stmt;
+        String sql = "SELECT id FROM RESERVATIONS ORDER BY id DESC LIMIT 1";
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next())
+                return rs.getInt(1);
+            else return 0;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 }

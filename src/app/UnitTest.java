@@ -86,7 +86,7 @@ public class UnitTest {
         res2.setId(2);
         res2.setStart(start2);
         res2.setEnd(end2);
-        res2.setState(State.Payed);
+        res2.setState(State.NoShow);
 
         Assert.assertTrue(manager.addReservation(res1));
         Assert.assertTrue(manager.addReservation(res2));

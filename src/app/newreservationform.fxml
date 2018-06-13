@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import app.RoomType?>
+<VBox xmlns:fx="http://www.javafx.com/fxml" spacing="20" fx:controller="app.NewReservationController">
+    <HBox spacing="20">
+        <Label text="Start" minWidth="90"/>
+        <DatePicker fx:id="startPicker" onAction="#onDateChanged"/>
+    </HBox>
+    <HBox spacing="20">
+        <Label text="End" minWidth="90"/>
+        <DatePicker fx:id="endPicker" onAction="#onDateChanged"/>
+    </HBox>
+    <HBox spacing="20">
+        <Label text="Customer" minWidth="90"/>
+        <ComboBox fx:id="customerSelector"/>
+    </HBox>
+    <HBox spacing="20">
+        <Label text="Room" minWidth="90"/>
+        <ComboBox fx:id="roomNoSelector"/>
+        <ComboBox fx:id="roomTypeSelector" onAction="#refreshRooms">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Any"/>
+                    <String fx:value="Single"/>
+                    <String fx:value="Double"/>
+                    <String fx:value="Triple"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+    <HBox spacing="20">
+        <Label text="State" minWidth="90"/>
+        <ComboBox fx:id="stateSelector">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Confirmed"/>
+                    <String fx:value="Cancelled"/>
+                    <String fx:value="No show"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+    <HBox alignment="CENTER_RIGHT" spacing="20">
+        <Button text="Accept" onAction="#onOkButtonClicked"/>
+        <Button text="Cancel"/>
+    </HBox>
+</VBox>

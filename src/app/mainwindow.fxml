@@ -29,7 +29,7 @@
                 </Menu>
                 <Menu text="Find">
                     <MenuItem text="Customer" onAction="#onFindCustomerClicked"/>
-                    <MenuItem text="Room"/>
+                    <MenuItem text="Room" onAction="#onFindRoomClicked"/>
                 </Menu>
             </MenuBar>
             <HBox spacing="20">
@@ -38,9 +38,9 @@
                 <TextField fx:id="nameField" minWidth="80" promptText="Name" />
                 <TextField fx:id="surnameField" minWidth="80" promptText="Surname" />
                 <TextField fx:id="roomNoField" minWidth="80" promptText="Room No" />
-                <CheckBox fx:id="startEnabler" onMouseClicked="#onStartEnablerClicked" text="Start"/>
+                <CheckBox fx:id="startEnabler" onAction="#onStartEnablerClicked" text="Start"/>
                 <DatePicker fx:id="startPicker" disable="true" minWidth="90" />
-                <CheckBox fx:id="endEnabler" onMouseClicked="#onEndEnablerClicked" text="End"/>
+                <CheckBox fx:id="endEnabler" onAction="#onEndEnablerClicked" text="End"/>
                 <DatePicker fx:id="endPicker" disable="true" minWidth="90" />
                 <ComboBox fx:id="statusSelector" minWidth="50">
                     <items>
@@ -53,7 +53,7 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <Button onMouseClicked="#onSearchClicked" text="Search" />
+                <Button onAction="#onSearchClicked" text="Search" />
             </HBox>
         </VBox>
 
@@ -63,9 +63,9 @@
     </center>
     <bottom>
         <HBox spacing="20">
-            <Button text="New reservation" onMouseClicked="#onNewClicked"/>
-            <Button text="Edit reservation" onMouseClicked="#onEditClicked"/>
-            <Button text="Delete reservation" onMouseClicked="#onDeleteClicked"/>
+            <Button text="New reservation" onAction="#onNewClicked"/>
+            <Button text="Edit reservation" onAction="#onEditClicked"/>
+            <Button text="Delete reservation" onAction="#onDeleteClicked"/>
         </HBox>
     </bottom>
 </BorderPane>

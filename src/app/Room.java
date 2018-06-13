@@ -40,4 +40,9 @@ public class Room {
             return (number == compared.getNumber() && type.equals(compared.getType()));
         } else return false;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(number);
+    }
 }
