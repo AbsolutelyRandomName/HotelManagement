@@ -15,7 +15,7 @@ public class DbManager {
         } catch (ClassNotFoundException e){
             throw e;
         }
-        conn = DriverManager.getConnection("jdbc:hsqldb:mem:membase");
+        conn = DriverManager.getConnection("jdbc:hsqldb:file:hotelDatabase");
         stmt = conn.createStatement();
         String sql = "CREATE TABLE IF NOT EXISTS RESERVATIONS(" +
                 "id INT NOT NULL," +
@@ -301,6 +301,37 @@ public class DbManager {
         }
         return results;
     }
+
+    public ArrayList<Room> findFreeRooms(LocalDate start, LocalDate end, RoomType type, Reservation reservation) throws SQLException{
+        ArrayList<Room> results = new ArrayList<>();
+        PreparedStatement stmt;
+        String sql = "SELECT DISTINCT * FROM ROOMS WHERE number NOT IN (" +
+                "SELECT roomNo FROM RESERVATIONS WHERE ((" +
+                "start >= ? AND start < ?) OR " +
+                "(end >= ? AND end <=?) OR " +
+                "(start <= ? AND end >= ?))  AND id NOT LIKE ?) AND type LIKE ?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, Date.valueOf(start));
+            stmt.setDate(2, Date.valueOf(end));
+            stmt.setDate(3, Date.valueOf(start));
+            stmt.setDate(4, Date.valueOf(end));
+            stmt.setDate(5, Date.valueOf(start));
+            stmt.setDate(6, Date.valueOf(end));
+            stmt.setInt(7, reservation.getId());
+            if(type == null) stmt.setString(8, "%");
+            else stmt.setInt(8, type.ordinal());
+
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next())
+                results.add(new Room(rs.getInt(1), RoomType.values()[rs.getInt(2)]));
+        } catch (SQLException e){
+            throw e;
+        }
+        return results;
+    }
+
     public boolean editCustomer(Customer customer) {
         int rows;
         PreparedStatement stmt;

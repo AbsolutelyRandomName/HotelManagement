@@ -54,7 +54,7 @@ public class NewCustomerFormController {
                 sum += Character.getNumericValue(id.charAt(7));
                 sum += Character.getNumericValue(id.charAt(8)) * 9;
                 sum += Character.getNumericValue(id.charAt(9)) * 7;
-                if(Character.getNumericValue(id.charAt(9)) != sum % 10) {
+                if(Character.getNumericValue(id.charAt(10)) != sum % 10) {
                     peselAlert.showAndWait();
                     return;
                 }

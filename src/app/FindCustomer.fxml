@@ -22,7 +22,7 @@
         <HBox spacing="20">
             <Button text="Edit" onAction="#onEditButtonClicked"/>
             <Button text="Delete" onAction="#onDeleteButtonClicked"/>
-            <Button text="Cancel" onAction="#onCancelButtonClicked"/>
+            <Button text="Close" onAction="#onCancelButtonClicked"/>
         </HBox>
     </bottom>
 </BorderPane>

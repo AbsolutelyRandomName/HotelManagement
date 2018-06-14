@@ -1,7 +1,5 @@
 package app;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -49,7 +46,7 @@ public class MainWindowController {
     private void initialize() {
 
         try {
-            manager = new DbManager("testbase");
+            manager = new DbManager();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error occured while opening database");
             alert.show();
@@ -64,6 +61,9 @@ public class MainWindowController {
             if(!n.matches("[\\d]"))
                 roomNoField.setText(n.replaceAll("[^\\d]", ""));
         });
+
+        startPicker.setValue(LocalDate.now());
+        endPicker.setValue(LocalDate.now());
 
         statusSelector.getSelectionModel().select(0);
 
@@ -87,7 +87,6 @@ public class MainWindowController {
                 roomColumn, startColumn, endColumn, stateColumn);
         try {
             reservations = manager.getReservations(-1, null, null, null, null, null,-1, null);
-            System.out.println(reservations.size());
             reservationsTable.setItems(FXCollections.observableArrayList(reservations));
         } catch (Exception ex) {ex.printStackTrace();}
 
@@ -96,11 +95,15 @@ public class MainWindowController {
     @FXML
     private void onStartEnablerClicked() {
         startPicker.setDisable(!startEnabler.isSelected());
+        dateChanged();
     }
     @FXML
     private void onEndEnablerClicked() {
         endPicker.setDisable(!endEnabler.isSelected());
+        dateChanged();
     }
+
+    //also used to refresh reservations after adding or modifying existing ones
     @FXML
     private void onSearchClicked() {
 
@@ -142,10 +145,25 @@ public class MainWindowController {
         stage.initOwner(roomNoField.getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
+        onSearchClicked();
     }
 
-    public void onEditClicked() {
-
+    public void onEditClicked() throws Exception {
+        Reservation reservation = reservationsTable.getSelectionModel().getSelectedItem();
+        if(reservation == null) return;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("editreservationform.fxml"));
+        Parent root = loader.load();
+        EditReservationController controller = loader.getController();
+        controller.setManager(manager);
+        controller.setReservation(reservation);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.initOwner(roomNoField.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+        onSearchClicked();
     }
 
     public void onDeleteClicked() {
@@ -215,5 +233,18 @@ public class MainWindowController {
         stage.initOwner(roomNoField.getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
+    }
+
+    @FXML
+    private void dateChanged() {
+        if(startPicker.isDisable() || endPicker.isDisable()) return;
+        else if(startPicker.getValue().isAfter(endPicker.getValue())){
+            endPicker.setValue(startPicker.getValue());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Wrong date");
+            alert.setHeaderText(null);
+            alert.setContentText("End of reservation must take place after its beginning");
+            alert.showAndWait();
+        }
     }
 }

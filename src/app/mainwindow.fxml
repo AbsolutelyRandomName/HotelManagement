@@ -34,14 +34,14 @@
             </MenuBar>
             <HBox spacing="20">
                 <TextField fx:id="idField" minWidth="50" promptText="ID" />
-                <TextField fx:id="customerIdField" minWidth="90" promptText="Customer ID" />
-                <TextField fx:id="nameField" minWidth="80" promptText="Name" />
-                <TextField fx:id="surnameField" minWidth="80" promptText="Surname" />
-                <TextField fx:id="roomNoField" minWidth="80" promptText="Room No" />
+                <TextField fx:id="customerIdField" minWidth="70" promptText="Customer ID" />
+                <TextField fx:id="nameField" minWidth="60" promptText="Name" />
+                <TextField fx:id="surnameField" minWidth="60" promptText="Surname" />
+                <TextField fx:id="roomNoField" minWidth="60" promptText="Room No" />
                 <CheckBox fx:id="startEnabler" onAction="#onStartEnablerClicked" text="Start"/>
-                <DatePicker fx:id="startPicker" disable="true" minWidth="90" />
+                <DatePicker fx:id="startPicker" disable="true" minWidth="50" onAction="#dateChanged"/>
                 <CheckBox fx:id="endEnabler" onAction="#onEndEnablerClicked" text="End"/>
-                <DatePicker fx:id="endPicker" disable="true" minWidth="90" />
+                <DatePicker fx:id="endPicker" disable="true" minWidth="50" onAction="#dateChanged"/>
                 <ComboBox fx:id="statusSelector" minWidth="50">
                     <items>
                         <FXCollections fx:factory="observableArrayList">

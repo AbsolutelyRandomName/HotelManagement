@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
-<VBox xmlns:fx="http://www.javafx.com/fxml" spacing="20" fx:controller="app.NewReservationController">
+<VBox xmlns:fx="http://www.javafx.com/fxml" spacing="20" fx:controller="app.EditReservationController">
     <HBox spacing="20">
         <Label text="Start" minWidth="90"/>
         <DatePicker fx:id="startPicker" onAction="#onDateChanged"/>

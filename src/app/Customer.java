@@ -1,7 +1,5 @@
 package app;
 
-import org.junit.Before;
-
 public class Customer {
     private String id, name, surname;
 
